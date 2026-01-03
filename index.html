@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlashCard Study - Anki Simplificado</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-layer-group"></i> FlashCard Study</h1>
+      <p class="subtitle">Sistema de estudo com cartões de memória - Estilo Anki Simplificado</p>
+    </header>
+
+    <!-- Menu Principal -->
+    <div class="menu" id="mainMenu">
+      <div class="menu-btn" data-panel="materias">
+        <i class="fas fa-book-open"></i>
+        <h2>Matérias</h2>
+        <p>Cadastre e gerencie suas matérias</p>
+      </div>
+
+      <div class="menu-btn" data-panel="cartoes">
+        <i class="fas fa-sticky-note"></i>
+        <h2>Cartões</h2>
+        <p>Crie e edite seus cartões de estudo</p>
+      </div>
+
+      <div class="menu-btn" data-panel="estudar">
+        <i class="fas fa-graduation-cap"></i>
+        <h2>Estudar</h2>
+        <p>Revise seus cartões com sistema espaçado</p>
+      </div>
+
+      <div class="menu-btn" data-panel="estatisticas">
+        <i class="fas fa-chart-bar"></i>
+        <h2>Estatísticas</h2>
+        <p>Veja seu progresso e desempenho</p>
+      </div>
+
+      <div class="menu-btn" data-panel="exportar">
+        <i class="fas fa-file-export"></i>
+        <h2>Exportar/Importar</h2>
+        <p>Backup e restore dos seus dados</p>
+      </div>
+    </div>
+
+    <!-- Painel de Matérias -->
+    <div class="panel" id="panelMaterias">
+      <div class="panel-header">
+        <h2><i class="fas fa-book-open"></i> Gerenciar Matérias</h2>
+        <button class="close-btn" data-close="materias">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <h3>Nova Matéria</h3>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="novaMateria" placeholder="Nome da matéria (ex: Matemática, História)">
+          <button class="btn" id="btnAddMateria"><i class="fas fa-plus"></i> Adicionar</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <h3>Matérias Cadastradas</h3>
+        <div class="item-list" id="listaMaterias">
+          <!-- Matérias serão carregadas aqui -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel de Cartões -->
+    <div class="panel" id="panelCartoes">
+      <div class="panel-header">
+        <h2><i class="fas fa-sticky-note"></i> Gerenciar Cartões</h2>
+        <button class="close-btn" data-close="cartoes">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <h3>Novo Cartão</h3>
+        <div class="form-group">
+          <label for="cartaoMateria">Matéria</label>
+          <select id="cartaoMateria">
+            <option value="">Selecione uma matéria</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="cartaoPergunta">Pergunta (Frente do cartão)</label>
+          <textarea id="cartaoPergunta" placeholder="Digite a pergunta..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="cartaoResposta">Resposta (Verso do cartão)</label>
+          <textarea id="cartaoResposta" placeholder="Digite a resposta..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="cartaoTags">Tags (opcional, separadas por vírgula)</label>
+          <input type="text" id="cartaoTags" placeholder="ex: importante, prova, revisão">
+        </div>
+
+        <button class="btn btn-success" id="btnAddCartao"><i class="fas fa-plus"></i> Adicionar Cartão</button>
+      </div>
+
+      <div class="form-group">
+        <h3>Filtros</h3>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <select id="filtroMateria">
+            <option value="">Todas as matérias</option>
+          </select>
+          <input type="text" id="filtroTexto" placeholder="Buscar por texto...">
+          <button class="btn" id="btnFiltrar"><i class="fas fa-search"></i> Filtrar</button>
+          <button class="btn btn-warning" id="btnLimparFiltro"><i class="fas fa-times"></i> Limpar</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <h3>Cartões Cadastrados</h3>
+        <div class="item-list" id="listaCartoes">
+          <!-- Cartões serão carregados aqui -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel de Estudo -->
+    <div class="panel" id="panelEstudar">
+      <div class="panel-header">
+        <h2><i class="fas fa-graduation-cap"></i> Modo Estudo</h2>
+        <button class="close-btn" data-close="estudar">&times;</button>
+      </div>
+
+      <div class="study-container">
+        <div class="card-count">
+          <span id="contadorCartoes">Carregando...</span>
+        </div>
+
+        <div class="flashcard-container">
+          <div class="flashcard" id="flashcard">
+            <div class="card-face card-front">
+              <div class="card-label">Clique para virar</div>
+              <div class="card-content" id="cardFront"></div>
+            </div>
+            <div class="card-face card-back">
+              <div class="card-label">Resposta</div>
+              <div class="card-content" id="cardBack"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADICIONAR ESTA SEÇÃO -->
+        <div class="acerto-erro-buttons" style="display: flex; justify-content: center; gap: 15px; margin: 20px 0;">
+          <button class="btn btn-acerto" id="btnAcertou" onclick="marcarAcertoErro('acertou')" title="Marcar como acertado">
+            <i class="fas fa-check-circle"></i> Acertou
+          </button>
+          <button class="btn btn-erro" id="btnErrou" onclick="marcarAcertoErro('errou')" title="Marcar como errado">
+            <i class="fas fa-times-circle"></i> Errou
+          </button>
+        </div>
+
+        <div class="difficulty-buttons" id="difficultyButtons">
+          <!-- Botões serão inseridos via JS -->
+        </div>
+
+        <div class="difficulty-buttons" id="difficultyButtons">
+          <!-- Botões serão inseridos via JS -->
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+          <button class="btn" id="btnPularCartao"><i class="fas fa-forward"></i> Pular Cartão</button>
+          <button class="btn btn-danger" id="btnFinalizarSessao"><i class="fas fa-stop"></i> Finalizar Sessão</button>
+        </div>
+
+        <div class="form-group" style="margin-top: 40px;">
+          <h3>Configurações do Estudo</h3>
+          <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;">
+            <div>
+              <label for="estudoMateria">Filtrar por matéria</label>
+              <select id="estudoMateria">
+                <option value="">Todas as matérias</option>
+              </select>
+            </div>
+            <div>
+              <label for="cartoesPorSessao">Cartões por sessão</label>
+              <input type="number" id="cartoesPorSessao" value="20" min="5" max="100">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="margin: 0;">
+                <input type="checkbox" id="ignorarRevisao" style="width: auto; margin-right: 8px;">
+                Revisão Livre (ignorar datas)
+              </label>
+              <small style="color: var(--text-secondary); margin-left: 24px;">
+                Estuda todos os cartões, mas não altera as datas de revisão
+              </small>
+            </div>
+            <div>
+              <button class="btn btn-success" id="btnIniciarEstudo">
+                <i class="fas fa-play"></i> Iniciar Nova Sessão
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Painel de Estatísticas -->
+  <div class="panel" id="panelEstatisticas">
+    <div class="panel-header">
+      <h2><i class="fas fa-chart-bar"></i> Estatísticas</h2>
+      <button class="close-btn" data-close="estatisticas">&times;</button>
+    </div>
+
+    <div class="stats-grid" id="statsGrid">
+      <!-- Estatísticas serão carregadas aqui -->
+    </div>
+
+    <div class="form-group" style="margin-top: 30px;">
+      <h3>Progresso por Matéria</h3>
+      <div id="graficoMaterias">
+        <!-- Gráfico simples será gerado aqui -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Painel de Exportação/Importação -->
+  <div class="panel" id="panelExportar">
+    <div class="panel-header">
+      <h2><i class="fas fa-file-export"></i> Exportar/Importar Dados</h2>
+      <button class="close-btn" data-close="exportar">&times;</button>
+    </div>
+
+    <div class="form-group">
+      <h3>Exportar Dados</h3>
+      <p>Faça backup de todos os seus dados em formato CSV para importar posteriormente ou usar em outras aplicações.</p>
+
+      <div class="export-options">
+        <button class="btn export-btn" id="btnExportMaterias">
+          <i class="fas fa-file-csv"></i> Exportar Matérias
+        </button>
+        <button class="btn export-btn" id="btnExportCartoes">
+          <i class="fas fa-file-csv"></i> Exportar Cartões
+        </button>
+        <button class="btn btn-success export-btn" id="btnExportCompleto">
+          <i class="fas fa-file-archive"></i> Exportar Tudo (Backup Completo)
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <h3>Importar Dados</h3>
+      <p>Importe dados de um backup anterior. Cuidado: importar substituirá seus dados atuais!</p>
+
+      <div class="import-area" id="importArea">
+        <p style="text-align: center; margin-bottom: 15px;">
+          <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--accent); margin-bottom: 10px; display: block;"></i>
+          Arraste e solte arquivos CSV aqui ou clique para selecionar
+        </p>
+        <div style="text-align: center;">
+          <button class="btn btn-warning" id="btnSelecionarArquivo">
+            <i class="fas fa-folder-open"></i> Selecionar Arquivo
+          </button>
+          <input type="file" id="fileInput" accept=".csv" style="display: none;">
+        </div>
+        <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
+          Formatos suportados: Matérias.csv, Cartões.csv ou Backup_Completo.csv
+        </p>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <label for="importAction">Ação de importação:</label>
+        <select id="importAction">
+          <option value="replace">Substituir todos os dados</option>
+          <option value="merge">Mesclar com dados existentes</option>
+        </select>
+      </div>
+
+      <button class="btn btn-danger" id="btnImportar" style="margin-top: 20px;">
+        <i class="fas fa-file-import"></i> Importar Dados Selecionados
+      </button>
+    </div>
+  </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <p>Carregando...</p>
+    </div>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>
