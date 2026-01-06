@@ -1106,44 +1106,6 @@ function atualizarGraficoMaterias() {
 
 // Funções para exportação/importação
 function exportarCSV(tipo) {
-  let conteudoCSV = "";
-  let nomeArquivo = "";
-
-  if (tipo === "materias") {
-    nomeArquivo = "Materias.csv";
-    conteudoCSV = "ID,Nome,DataCriacao,Cartoes\n";
-
-    // Contar cartões por matéria
-    const contagemCartoes = {};
-    AppState.cartoes.forEach((cartao) => {
-      contagemCartoes[cartao.materiaId] =
-        (contagemCartoes[cartao.materiaId] || 0) + 1;
-    });
-
-    AppState.materias.forEach((materia) => {
-      conteudoCSV += `${materia.id},"${materia.nome}","${
-        materia.dataCriacao
-      }",${contagemCartoes[materia.id] || 0}\n`;
-    });
-  } else if (tipo === "cartoes") {
-    nomeArquivo = "Cartoes.csv";
-    conteudoCSV =
-      "ID,MateriaID,Pergunta,Resposta,Tags,DataCriacao,DataRevisao,ProximaRevisao,Nivel,Revisoes,Acertos\n";
-
-    AppState.cartoes.forEach((cartao) => {
-      conteudoCSV += `${cartao.id},${
-        cartao.materiaId
-      },"${cartao.pergunta.replace(/"/g, '""')}","${cartao.resposta.replace(
-        /"/g,
-        '""'
-      )}","${cartao.tags.join(",")}","${cartao.dataCriacao}","${
-        cartao.dataRevisao
-      }","${cartao.proximaRevisao}",${cartao.nivel},${cartao.revisoes},${
-        cartao.acertos
-      }\n`;
-    });
-  }
-
   // Criar e baixar arquivo
   const blob = new Blob([conteudoCSV], { type: "text/csv;charset=utf-8;" });
   const link = document.createElement("a");

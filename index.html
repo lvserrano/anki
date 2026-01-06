@@ -245,45 +245,47 @@
         <button class="btn export-btn" id="btnExportCartoes">
           <i class="fas fa-file-csv"></i> Exportar Cartões
         </button>
+        <button class="btn btn-warning export-btn" id="btnExportAnki">
+          <i class="fas fa-file-download"></i> Exportar para Anki
+        </button>
         <button class="btn btn-success export-btn" id="btnExportCompleto">
           <i class="fas fa-file-archive"></i> Exportar Tudo (Backup Completo)
         </button>
       </div>
-    </div>
 
-    <div class="form-group">
-      <h3>Importar Dados</h3>
-      <p>Importe dados de um backup anterior. Cuidado: importar substituirá seus dados atuais!</p>
+      <div class="form-group">
+        <h3>Importar Dados</h3>
+        <p>Importe dados de um backup anterior. Cuidado: importar substituirá seus dados atuais!</p>
 
-      <div class="import-area" id="importArea">
-        <p style="text-align: center; margin-bottom: 15px;">
-          <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--accent); margin-bottom: 10px; display: block;"></i>
-          Arraste e solte arquivos CSV aqui ou clique para selecionar
-        </p>
-        <div style="text-align: center;">
-          <button class="btn btn-warning" id="btnSelecionarArquivo">
-            <i class="fas fa-folder-open"></i> Selecionar Arquivo
-          </button>
-          <input type="file" id="fileInput" accept=".csv" style="display: none;">
+        <div class="import-area" id="importArea">
+          <p style="text-align: center; margin-bottom: 15px;">
+            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--accent); margin-bottom: 10px; display: block;"></i>
+            Arraste e solte arquivos CSV aqui ou clique para selecionar
+          </p>
+          <div style="text-align: center;">
+            <button class="btn btn-warning" id="btnSelecionarArquivo">
+              <i class="fas fa-folder-open"></i> Selecionar Arquivo
+            </button>
+            <input type="file" id="fileInput" accept=".csv" style="display: none;">
+          </div>
+          <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
+            Formatos suportados: Matérias.csv, Cartões.csv ou Backup_Completo.csv
+          </p>
         </div>
-        <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
-          Formatos suportados: Matérias.csv, Cartões.csv ou Backup_Completo.csv
-        </p>
-      </div>
 
-      <div style="margin-top: 20px;">
-        <label for="importAction">Ação de importação:</label>
-        <select id="importAction">
-          <option value="replace">Substituir todos os dados</option>
-          <option value="merge">Mesclar com dados existentes</option>
-        </select>
-      </div>
+        <div style="margin-top: 20px;">
+          <label for="importAction">Ação de importação:</label>
+          <select id="importAction">
+            <option value="replace">Substituir todos os dados</option>
+            <option value="merge">Mesclar com dados existentes</option>
+          </select>
+        </div>
 
-      <button class="btn btn-danger" id="btnImportar" style="margin-top: 20px;">
-        <i class="fas fa-file-import"></i> Importar Dados Selecionados
-      </button>
+        <button class="btn btn-danger" id="btnImportar" style="margin-top: 20px;">
+          <i class="fas fa-file-import"></i> Importar Dados Selecionados
+        </button>
+      </div>
     </div>
-  </div>
   </div>
 
   <!-- Loading Overlay -->
